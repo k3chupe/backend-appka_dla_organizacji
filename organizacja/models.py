@@ -401,6 +401,7 @@ class WidokPartnerow(models.Model):
     odpowiedz = models.CharField(max_length=50, blank=True, null=True)
     osoba_odp_imie = models.CharField(max_length=50, blank=True, null=True)
     osoba_odp_nazwisko = models.CharField(max_length=70, blank=True, null=True)
+    osoba_odp_e_mail = models.CharField(max_length=70, blank=True, null=True)
     przychod_kwota = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
 
     def __str__(self):

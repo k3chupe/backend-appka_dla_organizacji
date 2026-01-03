@@ -68,21 +68,33 @@ class OdpowiedziSlownikSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
 # Moduł budżetu
-# Moduł Budżet
+class CzlonekSzczegolySerializer(serializers.ModelSerializer):
+    """Pomocniczy serializer do wyświetlania danych osoby w budżecie"""
+    class Meta:
+        model = Czlonek
+        fields = ['imie', 'nazwisko', 'e_mail']
+
+
 class PrzychodSerializer(serializers.ModelSerializer):
+    osoba_dane = CzlonekSzczegolySerializer(source='osoba_odpowiedzialna', read_only=True)
+
     class Meta:
         model = Przychod
-        fields = '__all__'
+        fields = ['id', 'kwota', 'nazwa', 'data', 'osoba_odpowiedzialna', 'osoba_dane', 'id_partner', 'opis']
 
 
 class WydatekSerializer(serializers.ModelSerializer):
+    osoba_dane = CzlonekSzczegolySerializer(source='osoba_odpowiedzialna', read_only=True)
+
     class Meta:
         model = Wydatek
-        fields = '__all__'
+        fields = ['id', 'kwota', 'nazwa', 'data', 'osoba_odpowiedzialna', 'osoba_dane', 'opis']
 
 
 class WidokBudzetuSerializer(serializers.ModelSerializer):
     class Meta:
         model = WidokBudzetu
         fields = '__all__'
+
