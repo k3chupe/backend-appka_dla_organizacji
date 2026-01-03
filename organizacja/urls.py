@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import ListaCzlonkowViewSet, CzlonekCRUDViewSet, CzlonekKierunekViewSet, SekcjaViewSet, KierunekViewSet, \
     CzlonekSekcjiViewSet, CzlonekProjektuViewSet, ProjektViewSet, PartnerViewSet, ListaPartnerowViewSet, \
-    OdpowiedziSlownikViewSet
+    OdpowiedziSlownikViewSet, pobierz_saldo, PrzychodViewSet, WydatekViewSet
 
 router = DefaultRouter()
 
@@ -24,6 +24,11 @@ router.register(r'partnerzy', PartnerViewSet, basename='partnerzy')
 router.register(r'lista-partnerow', ListaPartnerowViewSet, basename='lista-partnerow')
 router.register(r'partnerzy-statusy', OdpowiedziSlownikViewSet, basename='partnerzy-statusy')
 
+#Budżet
+router.register(r'przychody', PrzychodViewSet, basename='przychody')
+router.register(r'wydatki', WydatekViewSet, basename='wydatki')
+
 urlpatterns = [
     path('', include(router.urls)),
+    path('budzet/saldo/', pobierz_saldo, name='pobierz-saldo'),
 ]

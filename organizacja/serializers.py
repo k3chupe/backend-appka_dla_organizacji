@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Czlonek, WidokBazyCzlonkow, Kierunek, Czlonekkierunek, Sekcja, Czloneksekcji, Czlonekprojektu, \
-    Projekt, Partner, WidokPartnerow, OdpowiedziSlownik
+    Projekt, Partner, WidokPartnerow, OdpowiedziSlownik, Przychod, WidokBudzetu, Wydatek
 
 
 # Moduł członków
@@ -65,4 +65,24 @@ class WidokPartnerowSerializer(serializers.ModelSerializer):
 class OdpowiedziSlownikSerializer(serializers.ModelSerializer):
     class Meta:
         model = OdpowiedziSlownik
+        fields = '__all__'
+
+
+# Moduł budżetu
+# Moduł Budżet
+class PrzychodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Przychod
+        fields = '__all__'
+
+
+class WydatekSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wydatek
+        fields = '__all__'
+
+
+class WidokBudzetuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WidokBudzetu
         fields = '__all__'

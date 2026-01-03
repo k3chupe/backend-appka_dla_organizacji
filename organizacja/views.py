@@ -1,12 +1,18 @@
+from django.db import transaction
+from django.db.models import Sum
 from django.shortcuts import render
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework.response import Response
+from django.db.models import Sum
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import api_view
+
 from .models import Czlonek, WidokBazyCzlonkow, Czlonekkierunek, Czloneksekcji, Sekcja, Kierunek, Projekt, \
-    Czlonekprojektu, WidokPartnerow, Partner, OdpowiedziSlownik
+    Czlonekprojektu, WidokPartnerow, Partner, OdpowiedziSlownik, Przychod, Budzet, Wydatek
 from .serializers import CzlonekSerializer, WidokBazyCzlonkowSerializer, CzlonekKierunekSerializer, \
     CzlonekSekcjiSerializer, SekcjaSerializer, KierunekSerializer, ProjektSerializer, CzlonekProjektuSerializer, \
-    WidokPartnerowSerializer, PartnerSerializer, OdpowiedziSlownikSerializer
+    WidokPartnerowSerializer, PartnerSerializer, OdpowiedziSlownikSerializer, PrzychodSerializer, WydatekSerializer
 
 
 # Moduł członków
@@ -158,3 +164,60 @@ class PartnerViewSet(viewsets.ModelViewSet):
 class OdpowiedziSlownikViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = OdpowiedziSlownik.objects.all()
     serializer_class = OdpowiedziSlownikSerializer
+
+
+# Moduł budżetu
+@extend_schema_view(
+    list=extend_schema(summary="Lista przychodów", description="Pobiera surowe dane z tabeli przychodów."),
+    create=extend_schema(summary="Dodaj przychód", description="Tworzy rekord w tabeli Przychod i automatycznie wiąże go z tabelą Budzet."),
+    destroy=extend_schema(summary="Usuń przychód", description="Usuwa przychód i powiązany wpis w tabeli Budzet.")
+)
+class PrzychodViewSet(viewsets.ModelViewSet):
+    queryset = Przychod.objects.all()
+    serializer_class = PrzychodSerializer
+
+    def perform_create(self, serializer):
+        with transaction.atomic():
+            przychod = serializer.save()
+
+            Budzet.objects.create(
+                id_przychod=przychod,
+                kwota=przychod.kwota,
+                id_wydatek=None
+            )
+
+
+@extend_schema_view(
+    list=extend_schema(summary="Lista wydatków", description="Pobiera dane z tabeli wydatków."),
+    create=extend_schema(summary="Dodaj wydatek", description="Tworzy rekord w tabeli Wydatek i automatycznie wiąże go z tabelą Budzet."),
+    destroy=extend_schema(summary="Usuń wydatek", description="Usuwa wydatek i powiązany wpis w tabeli Budzet.")
+)
+class WydatekViewSet(viewsets.ModelViewSet):
+    queryset = Wydatek.objects.all()
+    serializer_class = WydatekSerializer
+
+    def perform_create(self, serializer):
+        with transaction.atomic():
+            wydatek = serializer.save()
+
+            Budzet.objects.create(
+                id_wydatek=wydatek,
+                kwota=wydatek.kwota,
+                id_przychod=None
+            )
+
+
+@extend_schema(summary="Pobierz aktualne saldo", description="Oblicza sumę przychodów minus sumę wydatków.")
+@api_view(['GET'])
+def pobierz_saldo(request):
+    suma_przychodow = Przychod.objects.aggregate(total=Sum('kwota'))['total'] or 0
+    suma_wydatkow = Wydatek.objects.aggregate(total=Sum('kwota'))['total'] or 0
+
+    saldo = suma_przychodow - suma_wydatkow
+
+    return Response({
+        'saldo': saldo,
+        'waluta': 'PLN',
+        'suma_przychodow': suma_przychodow,
+        'suma_wydatkow': suma_wydatkow
+    })
