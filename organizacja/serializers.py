@@ -128,3 +128,14 @@ class CzlonekObecnoscGridSerializer(serializers.ModelSerializer):
     class Meta:
         model = Czlonek
         fields = ['id', 'imie', 'nazwisko', 'e_mail', 'obecnosci']
+
+
+# Moduł certyfikatów
+class CertyfikatGenerujRequestSerializer(serializers.Serializer):
+    temp_file_name = serializers.CharField()
+    grupa_id = serializers.IntegerField()
+    typ_grupy = serializers.ChoiceField(choices=['wszyscy', 'sekcja', 'projekt'])
+
+
+class CertyfikatUploadSerializer(serializers.Serializer):
+    file = serializers.ImageField()

@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import ListaCzlonkowViewSet, CzlonekCRUDViewSet, CzlonekKierunekViewSet, SekcjaViewSet, KierunekViewSet, \
     CzlonekSekcjiViewSet, CzlonekProjektuViewSet, ProjektViewSet, PartnerViewSet, ListaPartnerowViewSet, \
     OdpowiedziSlownikViewSet, pobierz_saldo, PrzychodViewSet, WydatekViewSet, SpotkanieViewSet, SpotkanieCzlonekViewSet, \
-    WidokObecnosciViewSet, ObecnoscGridViewSet
+    WidokObecnosciViewSet, ObecnoscGridViewSet, CertyfikatGeneratorViewSet
 
 router = DefaultRouter()
 
@@ -35,11 +35,14 @@ router.register(r'przychody', PrzychodViewSet, basename='przychody')
 router.register(r'wydatki', WydatekViewSet, basename='wydatki')
 
 # Obecności
-
 router.register(r'spotkania', SpotkanieViewSet, basename='spotkania')
 router.register(r'obecnosci', SpotkanieCzlonekViewSet, basename='obecnosci')
 router.register(r'widok-obecnosci', WidokObecnosciViewSet, basename='widok-obecnosci')
 router.register(r'lista-obecnosc', ObecnoscGridViewSet, basename='obecnosc-grid')
+
+# Certyfikaty
+router.register(r'certyfikaty-generator', CertyfikatGeneratorViewSet, basename='certyfikaty-generator')
+
 
 urlpatterns = [
     path('', include(router.urls)),
