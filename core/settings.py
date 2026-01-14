@@ -144,7 +144,13 @@ SPECTACULAR_SETTINGS = {
 }
 
 CORS_ALLOWED_ORIGINS = [
+    "https://front-kohl-two.vercel.app",  # <--- Adres, który dostałeś przed chwilą
     "http://localhost:3000",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.railway.app",
+    "https://front-kohl-two.vercel.app", # <--- Ten sam adres
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
