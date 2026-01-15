@@ -317,7 +317,7 @@ class WidokBazyCzlonkow(models.Model):
     czlonek_email = models.CharField(max_length=70, blank=True, null=True)
     indeks = models.IntegerField(blank=True, null=True)
     telefon = models.IntegerField(blank=True, null=True)
-    data_aktualizacji = models.DateTimeField()
+    data_aktualizacji = models.DateField(null=True, blank=True)
     kierunek_nazwa = models.CharField(max_length=50, blank=True, null=True)
     projekt_nazwa = models.CharField(max_length=80, blank=True, null=True)
     sekcja_nazwa = models.CharField(max_length=50, blank=True, null=True)
