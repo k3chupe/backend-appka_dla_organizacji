@@ -326,7 +326,7 @@ class WidokBazyCzlonkow(models.Model):
         return f"{self.czlonek_imie} {self.czlonek_nazwisko}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'widok_bazy_czlonkow'
         verbose_name = "Widok Bazy Członków"
         verbose_name_plural = "Widoki Bazy Członków"
