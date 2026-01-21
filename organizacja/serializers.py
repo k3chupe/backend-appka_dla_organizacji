@@ -13,6 +13,7 @@ class OdpowiedziSlownikSerializer(serializers.ModelSerializer):
 
 # Moduł członków
 class WidokBazyCzlonkowSerializer(serializers.ModelSerializer):
+    data_aktualizacji = serializers.DateTimeField(format="%Y-%m-%d")
     class Meta:
         model = WidokBazyCzlonkow
         fields = '__all__'
